@@ -660,6 +660,128 @@ class DDR4_2400_4x16(DDR4_2400_16x4):
     IDD5 = '280mA'
     IDD3P1 = '41mA'
 
+
+
+# A single DDR5-4800 x64 (x32 times 2) channel (1 command and address bus),
+# with timings based on a DDR5-4800 16 Gbit datasheet (Micron MT60B1G16)
+# in an 16x8 configuration. # PLEASE UPDATE
+# Total channel capacity is 32GiB
+# 16 devices/rank * 2 ranks/channel * 1GiB/device = 32GiB/channel
+
+
+class DDR5_4800_16x4(DRAMInterface):
+
+    # size of device
+    device_size = "1GiB" #updated ( Based on Mouser site
+    # listing of above ram stick)
+
+    # 16x8 configuration, 16 devices each with a 8 bit interface
+    # (mouser website)
+    device_bus_width = 8 #updated
+
+    # DDR5 is a BL16 device
+    burst_length = 16 #updated
+
+    # Each device has a page (row buffer) size of 1 kilobyte (2K columns x4)
+    device_rowbuffer_size = "1KiB" #updated
+
+    # 16x4 configuration, so 16 devices
+    devices_per_rank = 16
+
+    # Dual rank device
+    ranks_per_channel = 2 #updated
+
+    # DDR5 has 4 (x16) or 8 (x4 and x8) bank groups
+    # Set to 8 for x4 case
+    # 8 Groups of 4 banks = 32 banks
+    bank_groups_per_rank = 8 #updated
+
+    # DDR5 has 32 banks(x4,x8) and 16 banks(x16) (4 or 8 bank groups in all
+    # configurations). Currently we do not capture the additional
+    # constraints incurred by the bank groups
+    banks_per_rank = 32 #updated
+
+    # override the default buffer sizes and go for something larger to
+    # accommodate the larger bank count
+    write_buffer_size = 128
+    read_buffer_size = 64 # 2 32bit busses per channel
+
+    # 40 CL, 4800MHz
+    tCK = "0.416ns" #updated
+
+    # tBURST is equivalent to the CAS-to-CAS delay (tCCD)
+    # With bank group architectures, tBURST represents the CAS-to-CAS
+    # delay for bursts to different bank groups (tCCD_S) max(8nCK,3.333ns)
+    tBURST = "3.333ns" #updated
+
+    # @2400 data rate, tCCD_L is 6 CK
+    # CAS-to-CAS delay for bursts to the same bank group
+    # tBURST is equivalent to tCCD_S; no explicit parameter required
+    # for CAS-to-CAS delay for bursts to different bank groups max(8nCK,5ns)
+    tCCD_L = "5ns" #updated
+
+    # DDR5-4800 40-39-39 ( Speed Grade -48B )
+    tRCD = "16ns" #updated
+    tCL = "16.6ns" #updated
+    tRP = "16ns" #updated
+    tRAS = "32ns" #updated
+
+    # RRD_S (different bank group) for 512B page is 8CK
+    tRRD = "3.328ns" #updated
+
+    # RRD_L (same bank group) for 1B page is MAX(8 CK, 5ns)
+    tRRD_L = "5ns" #updated
+
+    # tFAW for 1kB page is max(32nCK,13.333ns))
+    tXAW = "13.333ns" #updated
+    activation_limit = 4 #updated
+    # tRFC is 295ns in document
+    tRFC = "295ns" #updated
+
+    tWR = "30ns" #updated
+
+    # Here using the average of WTR_S and WTR_L
+    # (4 ck from diagram, need to update)
+    tWTR = "6.25ns" #updated
+
+    # max(12nCK, 7.5ns)
+    tRTP = "7.5ns" #updated
+
+    # Default same rank rd-to-wr bus turnaround to
+    # 2 CK + tDQS may add (0.5) = 2.5 nCk, @2400 MHz = 1 ns
+    tRTW = "1ns" #updated
+
+    # Default different rank bus delay to 2 CK, @2400 MHz = 0.832 ns
+    tCS = "0.832ns" #updated
+
+    # <=85C, half for >85C
+    tREFI = "3.9us" #updated
+
+    # active powerdown and precharge powerdown exit time max(7.5ns, 8nCK)
+    tXP = "7.5ns" #updated
+
+    # self refresh exit time
+    # same a trfc1
+    tXS = "295ns" #updated
+
+    # Current values from datasheet
+    IDD0 = "103mA" #updated
+    IDD02 = "8mA" #updated
+    IDD2N = "92mA" #updated
+    IDD3N = "142mA" #updated
+    IDD3N2 = "7mA" #updated
+    IDD4W = "349mA" #updated
+    IDD4R = "377mA" #updated
+    IDD5 = "277mA" #updated
+    IDD3P1 = "140mA" #updated
+    IDD2P1 = "88mA" #updated
+    IDD6 = "102mA" #updated
+    VDD = "1.1V" #updated ( Supply Voltage )
+    VDD2 = "1.8V" #updated( Vpp : Auxiliary supply for wordline boost)
+
+
+
+
 # A single LPDDR2-S4 x32 interface (one command/address bus), with
 # default timings based on a LPDDR2-1066 4 Gbit part (Micron MT42L128M32D1)
 # in a 1x32 configuration.

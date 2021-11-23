@@ -1,3 +1,5 @@
+.idea
+configs/tutorial
 build
 parser.out
 parsetab.py
